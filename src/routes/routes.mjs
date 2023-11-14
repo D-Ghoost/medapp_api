@@ -1,11 +1,18 @@
 import { Router } from 'express';
-import { reference } from '../config/firebase-config.mjs'; // retirar
 import { generateAccessToken, validateToken } from '../utils/token.mjs';
 import { validateLogin, consultEmailUser } from '../models/loginModel.mjs';
 import { createUser, showOneUser, showUsers, deleteUser, updateUser } from '../models/userModel.mjs';
 import { sendEmailRecoveryPassword } from '../utils/mail.mjs';
+import { showMedicines } from '../models/medicineModel.mjs';
+import generateQR  from '../utils/generateQR.mjs';
 
 const router = Router();
+
+/*------- PRUEBAS ------- */
+router.get('/', async (req, res) => {
+
+});
+
 
 /*------- LOGIN ------- */
 // Autenticacion de usuario
@@ -91,6 +98,8 @@ router.get('/search-user/:id' ,async (req, res) => {
         
         // Consulta a un solo user
         const response = await showOneUser(req.params.id);
+        const data = await generateQR( JSON.stringify(response.data()) )
+        console.log(data);
         res.send({ message: 'Usuario encontrado', user: response.data() });
 
     } catch (error) {
@@ -121,16 +130,6 @@ router.post('/update-user/:id', async (req, res) => {
     }
 });
 
-
-// Consulta de img
-router.get('/img', async (req, res) =>{
-    try {
-        const data = reference;
-        console.log(`La imagen es: ${data}`)
-    } catch (error) {
-        console.log(error);
-    }    
-})
 
 export default router;
 

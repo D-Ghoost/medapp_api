@@ -1,4 +1,9 @@
 .env
 firebase.json
+yarn.lock
 bun.lockb
+package-lock.json
+.vscode
+.idea
 node_modules
+.github
