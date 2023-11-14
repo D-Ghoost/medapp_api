@@ -30,6 +30,6 @@ for (let j = 1; j <= 3; j++) {
     imagesPills.push(url);  
 }
 
-console.log(imagesPills);
+//console.log(imagesPills);
 
 export { db, imagesPills };
