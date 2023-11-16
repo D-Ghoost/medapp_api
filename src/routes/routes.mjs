@@ -3,7 +3,7 @@ import { generateAccessToken, validateToken } from '../utils/token.mjs';
 import { validateLogin, consultEmailUser } from '../models/loginModel.mjs';
 import { createUser, showOneUser, showUsers, deleteUser, updateUser } from '../models/userModel.mjs';
 import { sendEmailRecoveryPassword } from '../utils/mail.mjs';
-import { showMedicines } from '../models/medicineModel.mjs';
+import { showMedicines, showReminder } from '../models/medicineModel.mjs';
 import generateQR  from '../utils/generateQR.mjs';
 
 const router = Router();
@@ -48,6 +48,70 @@ router.get('/recovery-password/:email', async (req, res) => {
     }
 });
 
+/* ------- MEDICINAS ------- */
+// Consulta medicinas
+router.get('/medicines', validateToken, async (req, res) => {
+    try {
+        const querySnapshot = await showMedicines();
+        const medicines = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+
+        res.send({ message: 'Consulta de recordatorios realizada', medicines });
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+// Consulta recordatorios
+router.get('/reminder', validateToken, async (req, res) => {
+    try {
+        const querySnapshot = await showReminder();
+        const reminders = querySnapshot.docs.map(doc => {
+            let init = doc.data().init.toDate();
+            let end = doc.data().end.toDate(); 
+            return {
+                id: doc.id,
+                ...doc.data(),
+                init: getYear(init) + '-' + getMonth(init) + '-' + getDay(init),
+                end: getYear(end) + '-' + getMonth(end) + '-' + getDay(end),
+            }
+        });
+
+        const date = new Date(reminders[0].init)
+        console.log(date);
+
+        res.send({ message: 'Consulta de recordatorios realizada', reminders });
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+
+// Creacion de recordatorio
+router.post('/new-reminder', validateToken,async (req, res) => {
+    try {
+        
+        const { user_id, med_id, fecha} = req.body;
+       
+        console.log(`user_id: ${user_id}, med_id: ${med_id}, fecha: ${fecha}`);
+
+        // Llamar al modelo
+        /*const data = await createReminder({
+            user_id,
+            med_id,
+            fecha
+        });*/
+
+        //console.log(data);
+
+        res.send({ message: 'Recordatorio creado' });
+
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 /*------- USUARIOS ------- */
 // Consulta de usuarios

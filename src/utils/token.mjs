@@ -12,6 +12,7 @@ function generateAccessToken(user) {
 // Validación del token
 function validateToken(req, res, next) {
     const accesToken = req.header('auth-token');
+    console.log(accesToken);
     if(!accesToken) res.send('Lo siento, necesitas un token');
 
     jsonwebtoken.verify(accesToken, secretKey, (err, user) => {

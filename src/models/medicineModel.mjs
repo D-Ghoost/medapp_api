@@ -4,4 +4,12 @@ function showMedicines() {
     return db.collection('medicine').get();
 }
 
-export { showMedicines };
+function createReminder(data) {
+    return db.collection('agenda').add(data);
+}
+
+function showReminder() {
+    return db.collection('agenda').get();
+}
+
+export { showMedicines, showReminder, createReminder };
