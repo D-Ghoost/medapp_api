@@ -90,7 +90,7 @@ router.get('/reminder', validateToken, async (req, res) => {
 
 
 // Creacion de recordatorio
-router.post('/new-reminder', validateToken,async (req, res) => {
+router.post('/new-reminder',async (req, res) => {
     try {
         
         const { user_id, med_id, fecha} = req.body;
